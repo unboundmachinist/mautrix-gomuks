@@ -1371,7 +1371,7 @@ func (cli *Client) MarkRead(roomID id.RoomID, eventID id.EventID) (err error) {
 // MarkReadWithContent sends a read receipt including custom data.
 // N.B. This is not (yet) a part of the spec, normal servers will drop any extra content.
 func (cli *Client) MarkReadWithContent(roomID id.RoomID, eventID id.EventID, content interface{}) (err error) {
-	urlPath := cli.BuildClientURL("v3", "rooms", roomID, "receipt", "m.read", eventID)
+	urlPath := cli.BuildClientURL("v3", "rooms", roomID, "receipt", "m.read.private", eventID)
 	_, err = cli.MakeRequest("POST", urlPath, &content, nil)
 	return
 }

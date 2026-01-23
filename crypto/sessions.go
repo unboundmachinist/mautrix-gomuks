@@ -9,6 +9,7 @@ package crypto
 import (
 	"errors"
 	"time"
+	"fmt"
 
 	"maunium.net/go/mautrix/crypto/olm"
 	"maunium.net/go/mautrix/event"
@@ -48,6 +49,22 @@ func (session *OlmSession) ID() id.SessionID {
 		session.id = session.Internal.ID()
 	}
 	return session.id
+}
+
+func (igs *InboundGroupSession) export() (*ExportedSession, error) {
+	key, err := igs.Internal.Export(igs.Internal.FirstKnownIndex())
+	if err != nil {
+		return nil, fmt.Errorf("failed to export session: %w", err)
+	}
+	return &ExportedSession{
+		Algorithm:         id.AlgorithmMegolmV1,
+		ForwardingChains:  igs.ForwardingChains,
+		RoomID:            igs.RoomID,
+		SenderKey:         igs.SenderKey,
+		SenderClaimedKeys: SenderClaimedKeys{},
+		SessionID:         igs.ID(),
+		SessionKey:        string(key),
+	}, nil
 }
 
 func (session *OlmSession) Describe() string {

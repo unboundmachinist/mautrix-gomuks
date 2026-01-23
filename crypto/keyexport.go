@@ -141,7 +141,7 @@ func formatKeyExportData(data []byte) []byte {
 		buf.WriteRune('\n')
 	}
 	buf.WriteString(exportSuffix)
-	if buf.Len() != buf.Cap() || buf.Len() != outputLength {
+	if buf.Len() > buf.Cap() || buf.Len() != outputLength {
 		panic(fmt.Errorf("unexpected length %d / %d / %d", buf.Len(), buf.Cap(), outputLength))
 	}
 	return buf.Bytes()
